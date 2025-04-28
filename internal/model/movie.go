@@ -4,7 +4,7 @@ import "time"
 
 type Movie struct {
 	ID               string
-	Rating           string // Rating as in PG-13, R, etc.
+	Rating           string // Возрастной рейтинг (К,БА, Б14 и т.д.)
 	PrimaryTitle     string
 	OriginalTitle    string
 	ReleaseYear      uint16
