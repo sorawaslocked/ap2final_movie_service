@@ -4,7 +4,7 @@ import "time"
 
 type Movie struct {
 	ID               string
-	Rating           string // Возрастной рейтинг (К,БА, Б14 и т.д.)
+	AgeRating        string
 	PrimaryTitle     string
 	OriginalTitle    string
 	ReleaseYear      uint16
@@ -17,7 +17,7 @@ type Movie struct {
 
 type MovieFilter struct {
 	ID                    *string
-	Ratings               []string
+	AgeRating             *string
 	PrimaryTitle          *string
 	OriginalTitle         *string
 	ReleaseYearRange      *ReleaseYearRange
@@ -39,7 +39,7 @@ type RuntimeInMinutesRange struct {
 }
 
 type MovieUpdateData struct {
-	Rating           *string // Rating as in PG-13, R, etc.
+	AgeRating        *string
 	PrimaryTitle     *string
 	OriginalTitle    *string
 	ReleaseYear      *uint16
