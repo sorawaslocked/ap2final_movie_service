@@ -1,8 +1,6 @@
 mongo:
   database: "movies"
   uri: "localhost:27017"
-  username: "fein"
-  password: "fein"
 
 server:
   gRPCServer:

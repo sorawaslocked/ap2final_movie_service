@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/sorawaslocked/ap2final_movie_service/pkg/mongo"
 	"time"
@@ -31,7 +32,7 @@ func New() (*Config, error) {
 
 	err := cleanenv.ReadConfig("config.yml", &cfg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error creating config: %w", err)
 	}
 
 	return &cfg, nil
