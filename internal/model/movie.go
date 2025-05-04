@@ -10,9 +10,9 @@ type Movie struct {
 	ReleaseYear      uint16
 	RuntimeInMinutes uint16
 	Genres           []string
-	InTheatricalRun  bool
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
+	IsDeleted        bool
 }
 
 type MovieFilter struct {
@@ -23,7 +23,7 @@ type MovieFilter struct {
 	ReleaseYearRange      *ReleaseYearRange
 	RuntimeInMinutesRange *RuntimeInMinutesRange
 	Genres                []string
-	InTheatricalRun       *bool
+	IsDeleted             *bool
 }
 
 // ReleaseYearRange is inclusive
@@ -45,6 +45,6 @@ type MovieUpdateData struct {
 	ReleaseYear      *uint16
 	RuntimeInMinutes *uint16
 	Genres           []string
-	InTheatricalRun  *bool
 	UpdatedAt        time.Time
+	IsDeleted        *bool
 }

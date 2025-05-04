@@ -14,9 +14,9 @@ type Movie struct {
 	ReleaseYear      uint16    `bson:"releaseYear"`
 	RuntimeInMinutes uint16    `bson:"runtimeInMinutes"`
 	Genres           []string  `bson:"genres"`
-	InTheatricalRun  bool      `bson:"inTheatricalRun"`
 	CreatedAt        time.Time `bson:"createdAt"`
 	UpdatedAt        time.Time `bson:"updatedAt"`
+	IsDeleted        bool      `bson:"isDeleted"`
 }
 
 func FromMovie(movie model.Movie) Movie {
@@ -28,7 +28,7 @@ func FromMovie(movie model.Movie) Movie {
 		ReleaseYear:      movie.ReleaseYear,
 		RuntimeInMinutes: movie.RuntimeInMinutes,
 		Genres:           movie.Genres,
-		InTheatricalRun:  movie.InTheatricalRun,
+		IsDeleted:        movie.IsDeleted,
 		CreatedAt:        movie.CreatedAt,
 		UpdatedAt:        movie.UpdatedAt,
 	}
@@ -43,7 +43,7 @@ func ToMovie(movie Movie) model.Movie {
 		ReleaseYear:      movie.ReleaseYear,
 		RuntimeInMinutes: movie.RuntimeInMinutes,
 		Genres:           movie.Genres,
-		InTheatricalRun:  movie.InTheatricalRun,
+		IsDeleted:        movie.IsDeleted,
 		CreatedAt:        movie.CreatedAt,
 		UpdatedAt:        movie.UpdatedAt,
 	}
@@ -88,8 +88,8 @@ func FromMovieFilter(filter model.MovieFilter) bson.M {
 		}
 	}
 
-	if filter.InTheatricalRun != nil {
-		query["inTheatricalRun"] = *filter.InTheatricalRun
+	if filter.IsDeleted != nil {
+		query["isDeleted"] = *filter.IsDeleted
 	}
 
 	return query
@@ -122,8 +122,8 @@ func FromMovieUpdateData(update model.MovieUpdateData) bson.M {
 		query["genres"] = update.Genres
 	}
 
-	if update.InTheatricalRun != nil {
-		query["inTheatricalRun"] = *update.InTheatricalRun
+	if update.IsDeleted != nil {
+		query["isDeleted"] = *update.IsDeleted
 	}
 
 	query["updatedAt"] = update.UpdatedAt

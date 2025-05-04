@@ -18,7 +18,7 @@ func (uc *MovieUseCase) Create(ctx context.Context, movie model.Movie) (model.Mo
 	movie.CreatedAt = time.Now().UTC()
 	movie.UpdatedAt = time.Now().UTC()
 
-	newMovie, err := uc.repo.Create(ctx, movie)
+	newMovie, err := uc.repo.InsertOne(ctx, movie)
 	if err != nil {
 		return model.Movie{}, err
 	}
@@ -27,7 +27,7 @@ func (uc *MovieUseCase) Create(ctx context.Context, movie model.Movie) (model.Mo
 }
 
 func (uc *MovieUseCase) GetAll(ctx context.Context) ([]model.Movie, error) {
-	movies, err := uc.repo.GetAll(ctx, model.MovieFilter{})
+	movies, err := uc.repo.Find(ctx, model.MovieFilter{})
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (uc *MovieUseCase) GetAll(ctx context.Context) ([]model.Movie, error) {
 }
 
 func (uc *MovieUseCase) GetAllWithFilter(ctx context.Context, filter model.MovieFilter) ([]model.Movie, error) {
-	movies, err := uc.repo.GetAll(ctx, filter)
+	movies, err := uc.repo.Find(ctx, filter)
 	if err != nil {
 		return []model.Movie{}, err
 	}
@@ -45,7 +45,7 @@ func (uc *MovieUseCase) GetAllWithFilter(ctx context.Context, filter model.Movie
 }
 
 func (uc *MovieUseCase) GetByID(ctx context.Context, id string) (model.Movie, error) {
-	movie, err := uc.repo.Get(ctx, model.MovieFilter{ID: &id})
+	movie, err := uc.repo.FindOne(ctx, model.MovieFilter{ID: &id})
 	if err != nil {
 		return model.Movie{}, err
 	}
@@ -56,7 +56,7 @@ func (uc *MovieUseCase) GetByID(ctx context.Context, id string) (model.Movie, er
 func (uc *MovieUseCase) UpdateByID(ctx context.Context, id string, update model.MovieUpdateData) (model.Movie, error) {
 	update.UpdatedAt = time.Now().UTC()
 
-	updatedMovie, err := uc.repo.Update(
+	updatedMovie, err := uc.repo.UpdateOne(
 		ctx,
 		model.MovieFilter{ID: &id},
 		update,
@@ -69,7 +69,7 @@ func (uc *MovieUseCase) UpdateByID(ctx context.Context, id string, update model.
 }
 
 func (uc *MovieUseCase) DeleteByID(ctx context.Context, id string) (model.Movie, error) {
-	deletedMovie, err := uc.repo.Delete(ctx, model.MovieFilter{ID: &id})
+	deletedMovie, err := uc.repo.DeleteOne(ctx, model.MovieFilter{ID: &id})
 	if err != nil {
 		return model.Movie{}, err
 	}
