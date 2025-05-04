@@ -1,9 +1,10 @@
+env: "local"
+
 mongo:
   database: "movies"
   uri: "localhost:27017"
 
 server:
-  gRPCServer:
+  grpc:
     port: 9999
-
-version: "1.0.0"
+    timeout: 10h

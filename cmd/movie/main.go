@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/sorawaslocked/ap2final_movie_service/config"
+	"github.com/sorawaslocked/ap2final_movie_service/internal/config"
 	"log"
 )
 
 func main() {
-	cfg, err := config.New()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// TODO: load config
+	cfg := config.MustLoad()
+	log.Println(cfg)
 
-	log.Print(cfg)
+	// TODO: setup logger
+
+	// TODO: initialize app and run it
 }

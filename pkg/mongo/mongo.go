@@ -6,8 +6,8 @@ import (
 )
 
 type Config struct {
-	Database string `yaml:"database" env:"MONGO_DB"`
-	URI      string `yaml:"uri" env:"MONGO_URI"`
+	Database string `yaml:"database" env:"MONGO_DB" env-required:"true"`
+	URI      string `yaml:"uri" env:"MONGO_URI" env-required:"true"`
 	Username string `yaml:"username" env:"MONGO_USERNAME"`
 	Password string `yaml:"password" env:"MONGO_PASSWORD"`
 }
