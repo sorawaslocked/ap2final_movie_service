@@ -17,6 +17,7 @@ func NewMovie(repo MovieRepository) *MovieUseCase {
 func (uc *MovieUseCase) Create(ctx context.Context, movie model.Movie) (model.Movie, error) {
 	movie.CreatedAt = time.Now().UTC()
 	movie.UpdatedAt = time.Now().UTC()
+	movie.IsDeleted = false
 
 	newMovie, err := uc.repo.InsertOne(ctx, movie)
 	if err != nil {
