@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"github.com/sorawaslocked/ap2final_base/pkg/logger"
+	"github.com/sorawaslocked/ap2final_movie_service/internal/app"
 	"github.com/sorawaslocked/ap2final_movie_service/internal/config"
 )
 
 func main() {
+	ctx := context.Background()
+
 	// TODO: load config
 	cfg := config.MustLoad()
 
@@ -14,4 +18,11 @@ func main() {
 
 	// TODO: initialize app and run it
 	log.Info("initializing application")
+	application, err := app.New(ctx, cfg, log)
+	if err != nil {
+		return
+	}
+
+	log.Info("running application")
+	application.Run()
 }

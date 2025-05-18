@@ -36,9 +36,11 @@ func New(
 }
 
 func (s *Server) MustRun() {
-	if err := s.run(); err != nil {
-		panic(err)
-	}
+	go func() {
+		if err := s.run(); err != nil {
+			panic(err)
+		}
+	}()
 }
 
 func (s *Server) Stop() {
