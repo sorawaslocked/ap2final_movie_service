@@ -7,21 +7,21 @@ import (
 	svc "github.com/sorawaslocked/ap2final_protos_gen/service/movie"
 )
 
-type MovieHandler struct {
+type MovieServer struct {
 	uc MovieUseCase
 	svc.UnimplementedMovieServiceServer
 }
 
-func NewMovieHandler(uc MovieUseCase) *MovieHandler {
-	return &MovieHandler{
+func NewMovieServer(uc MovieUseCase) *MovieServer {
+	return &MovieServer{
 		uc: uc,
 	}
 }
 
-func (h *MovieHandler) Create(ctx context.Context, req *svc.CreateRequest) (*svc.CreateResponse, error) {
+func (s *MovieServer) Create(ctx context.Context, req *svc.CreateRequest) (*svc.CreateResponse, error) {
 	movie := dto.ToMovieFromCreateRequest(req)
 
-	createdMovie, err := h.uc.Create(ctx, movie)
+	createdMovie, err := s.uc.Create(ctx, movie)
 	if err != nil {
 		return nil, dto.FromError(err)
 	}
@@ -31,10 +31,10 @@ func (h *MovieHandler) Create(ctx context.Context, req *svc.CreateRequest) (*svc
 	}, nil
 }
 
-func (h *MovieHandler) Get(ctx context.Context, req *svc.GetRequest) (*svc.GetResponse, error) {
+func (s *MovieServer) Get(ctx context.Context, req *svc.GetRequest) (*svc.GetResponse, error) {
 	id := req.ID
 
-	movie, err := h.uc.GetByID(ctx, id)
+	movie, err := s.uc.GetByID(ctx, id)
 	if err != nil {
 		return nil, dto.FromError(err)
 	}
@@ -44,8 +44,8 @@ func (h *MovieHandler) Get(ctx context.Context, req *svc.GetRequest) (*svc.GetRe
 	}, nil
 }
 
-func (h *MovieHandler) GetAll(ctx context.Context, req *svc.GetAllRequest) (*svc.GetAllResponse, error) {
-	movies, err := h.uc.GetAll(ctx)
+func (s *MovieServer) GetAll(ctx context.Context, req *svc.GetAllRequest) (*svc.GetAllResponse, error) {
+	movies, err := s.uc.GetAll(ctx)
 	if err != nil {
 		return nil, dto.FromError(err)
 	}
@@ -61,10 +61,10 @@ func (h *MovieHandler) GetAll(ctx context.Context, req *svc.GetAllRequest) (*svc
 	}, nil
 }
 
-func (h *MovieHandler) Update(ctx context.Context, req *svc.UpdateRequest) (*svc.UpdateResponse, error) {
+func (s *MovieServer) Update(ctx context.Context, req *svc.UpdateRequest) (*svc.UpdateResponse, error) {
 	id, update := dto.ToMovieUpdateFromUpdateRequest(req)
 
-	updatedMovie, err := h.uc.UpdateByID(ctx, id, update)
+	updatedMovie, err := s.uc.UpdateByID(ctx, id, update)
 	if err != nil {
 		return nil, dto.FromError(err)
 	}
@@ -74,10 +74,10 @@ func (h *MovieHandler) Update(ctx context.Context, req *svc.UpdateRequest) (*svc
 	}, nil
 }
 
-func (h *MovieHandler) Delete(ctx context.Context, req *svc.DeleteRequest) (*svc.DeleteResponse, error) {
+func (s *MovieServer) Delete(ctx context.Context, req *svc.DeleteRequest) (*svc.DeleteResponse, error) {
 	id := req.ID
 
-	movie, err := h.uc.DeleteByID(ctx, id)
+	movie, err := s.uc.DeleteByID(ctx, id)
 	if err != nil {
 		return nil, dto.FromError(err)
 	}
