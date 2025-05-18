@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/sorawaslocked/ap2final_base/config"
 	"github.com/sorawaslocked/ap2final_base/pkg/logger"
+	"github.com/sorawaslocked/ap2final_movie_service/internal/config"
 )
 
 func main() {

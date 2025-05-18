@@ -3,7 +3,7 @@ module github.com/sorawaslocked/ap2final_movie_service
 go 1.23
 
 require (
-	github.com/sorawaslocked/ap2final_base v0.0.0-20250513103456-c7fc8b97c791
+	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/sorawaslocked/ap2final_protos_gen v0.0.0-20250518115842-0f9aedc5e1e3
 	go.mongodb.org/mongo-driver v1.17.3
 	google.golang.org/grpc v1.72.0
@@ -12,14 +12,11 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/fatih/color v1.18.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/ilyakaznacheev/cleanenv v1.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/sorawaslocked/ap2final_base v1.0.6 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
