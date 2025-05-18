@@ -10,13 +10,13 @@ import (
 
 type (
 	Config struct {
-		Env    string        `yaml:"env" env-required:"true"`
-		Mongo  *mongo.Config `yaml:"mongo" env-required:"true"`
-		Server *Server       `yaml:"server" env-required:"true"`
+		Env    string       `yaml:"env" env-required:"true"`
+		Mongo  mongo.Config `yaml:"mongo" env-required:"true"`
+		Server Server       `yaml:"server" env-required:"true"`
 	}
 
 	Server struct {
-		GRPC *grpc.Config `yaml:"grpc" env-required:"true"`
+		GRPC grpc.Config `yaml:"grpc" env-required:"true"`
 	}
 )
 

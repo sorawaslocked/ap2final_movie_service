@@ -12,14 +12,14 @@ import (
 
 type Server struct {
 	s            *grpc.Server
-	cfg          *grpccfg.Config
+	cfg          grpccfg.Config
 	addr         string
 	log          *slog.Logger
 	movieUseCase MovieUseCase
 }
 
 func New(
-	cfg *grpccfg.Config,
+	cfg grpccfg.Config,
 	log *slog.Logger,
 	movieUseCase MovieUseCase,
 ) *Server {
