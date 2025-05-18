@@ -21,7 +21,7 @@ func NewMovie(conn *mongo.Database) *Movie {
 	return &Movie{col: collection}
 }
 
-func (db *Movie) Create(ctx context.Context, movie model.Movie) (model.Movie, error) {
+func (db *Movie) InsertOne(ctx context.Context, movie model.Movie) (model.Movie, error) {
 	movieDao := dao.FromMovie(movie)
 
 	res, err := db.col.InsertOne(ctx, movieDao)
