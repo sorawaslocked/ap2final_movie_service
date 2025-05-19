@@ -67,7 +67,9 @@ func (a *App) Run() {
 	signal.Notify(shutdownCh, syscall.SIGINT, syscall.SIGTERM)
 
 	s := <-shutdownCh
-	a.log.Info("received system shutdown signal", slog.Any("signal", s))
+
+	a.log.Info("received system shutdown signal", slog.Any("signal", s.String()))
+	a.log.Info("stopping the application")
 	a.stop()
 	a.log.Info("graceful shutdown complete")
 }

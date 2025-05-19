@@ -20,6 +20,8 @@ func main() {
 	log.Info("initializing application")
 	application, err := app.New(ctx, cfg, log)
 	if err != nil {
+		log.Error("failed to initialize application")
+
 		return
 	}
 
