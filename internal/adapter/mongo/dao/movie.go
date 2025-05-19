@@ -3,25 +3,31 @@ package dao
 import (
 	"github.com/sorawaslocked/ap2final_movie_service/internal/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
 type Movie struct {
-	ID               string    `bson:"_id,omitempty"`
-	AgeRating        string    `bson:"ageRating"`
-	PrimaryTitle     string    `bson:"primaryTitle"`
-	OriginalTitle    string    `bson:"originalTitle"`
-	ReleaseYear      uint16    `bson:"releaseYear"`
-	RuntimeInMinutes uint16    `bson:"runtimeInMinutes"`
-	Genres           []string  `bson:"genres"`
-	CreatedAt        time.Time `bson:"createdAt"`
-	UpdatedAt        time.Time `bson:"updatedAt"`
-	IsDeleted        bool      `bson:"isDeleted"`
+	ID               primitive.ObjectID `bson:"_id,omitempty"`
+	AgeRating        string             `bson:"ageRating"`
+	PrimaryTitle     string             `bson:"primaryTitle"`
+	OriginalTitle    string             `bson:"originalTitle"`
+	ReleaseYear      uint16             `bson:"releaseYear"`
+	RuntimeInMinutes uint16             `bson:"runtimeInMinutes"`
+	Genres           []string           `bson:"genres"`
+	CreatedAt        time.Time          `bson:"createdAt"`
+	UpdatedAt        time.Time          `bson:"updatedAt"`
+	IsDeleted        bool               `bson:"isDeleted"`
 }
 
-func FromMovie(movie model.Movie) Movie {
+func FromMovie(movie model.Movie) (Movie, error) {
+	objID, err := primitive.ObjectIDFromHex(movie.ID)
+	if err != nil && movie.ID != "" {
+		return Movie{}, err
+	}
+
 	return Movie{
-		ID:               movie.ID,
+		ID:               objID,
 		AgeRating:        movie.AgeRating,
 		PrimaryTitle:     movie.PrimaryTitle,
 		OriginalTitle:    movie.OriginalTitle,
@@ -31,12 +37,12 @@ func FromMovie(movie model.Movie) Movie {
 		IsDeleted:        movie.IsDeleted,
 		CreatedAt:        movie.CreatedAt,
 		UpdatedAt:        movie.UpdatedAt,
-	}
+	}, nil
 }
 
 func ToMovie(movie Movie) model.Movie {
 	return model.Movie{
-		ID:               movie.ID,
+		ID:               movie.ID.Hex(),
 		AgeRating:        movie.AgeRating,
 		PrimaryTitle:     movie.PrimaryTitle,
 		OriginalTitle:    movie.OriginalTitle,
@@ -49,11 +55,16 @@ func ToMovie(movie Movie) model.Movie {
 	}
 }
 
-func FromMovieFilter(filter model.MovieFilter) bson.M {
+func FromMovieFilter(filter model.MovieFilter) (bson.M, error) {
 	query := bson.M{}
 
 	if filter.ID != nil {
-		query["_id"] = *filter.ID
+		objID, err := primitive.ObjectIDFromHex(*filter.ID)
+		if err != nil {
+			return query, err
+		}
+
+		query["_id"] = objID
 	}
 
 	if filter.AgeRating != nil {
@@ -92,7 +103,7 @@ func FromMovieFilter(filter model.MovieFilter) bson.M {
 		query["isDeleted"] = *filter.IsDeleted
 	}
 
-	return query
+	return query, nil
 }
 
 func FromMovieUpdateData(update model.MovieUpdateData) bson.M {

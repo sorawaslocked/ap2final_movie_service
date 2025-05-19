@@ -22,7 +22,10 @@ func NewMovie(conn *mongo.Database) *Movie {
 }
 
 func (db *Movie) InsertOne(ctx context.Context, movie model.Movie) (model.Movie, error) {
-	movieDao := dao.FromMovie(movie)
+	movieDao, err := dao.FromMovie(movie)
+	if err != nil {
+		return model.Movie{}, mongoError("primitive.ObjectIDFromHex", err)
+	}
 
 	res, err := db.col.InsertOne(ctx, movieDao)
 
@@ -41,9 +44,14 @@ func (db *Movie) InsertOne(ctx context.Context, movie model.Movie) (model.Movie,
 func (db *Movie) FindOne(ctx context.Context, filter model.MovieFilter) (model.Movie, error) {
 	var movieDao dao.Movie
 
-	err := db.col.FindOne(
+	query, err := dao.FromMovieFilter(filter)
+	if err != nil {
+		return model.Movie{}, mongoError("primitive.ObjectIDFromHex", err)
+	}
+
+	err = db.col.FindOne(
 		ctx,
-		dao.FromMovieFilter(filter),
+		query,
 	).Decode(&movieDao)
 
 	if err != nil {
@@ -60,9 +68,14 @@ func (db *Movie) FindOne(ctx context.Context, filter model.MovieFilter) (model.M
 func (db *Movie) Find(ctx context.Context, filter model.MovieFilter) ([]model.Movie, error) {
 	var movieDaos []dao.Movie
 
+	query, err := dao.FromMovieFilter(filter)
+	if err != nil {
+		return []model.Movie{}, mongoError("primitive.ObjectIDFromHex", err)
+	}
+
 	cur, err := db.col.Find(
 		ctx,
-		dao.FromMovieFilter(filter),
+		query,
 	)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -86,9 +99,14 @@ func (db *Movie) Find(ctx context.Context, filter model.MovieFilter) ([]model.Mo
 }
 
 func (db *Movie) UpdateOne(ctx context.Context, filter model.MovieFilter, update model.MovieUpdateData) (model.Movie, error) {
+	query, err := dao.FromMovieFilter(filter)
+	if err != nil {
+		return model.Movie{}, mongoError("primitive.ObjectIDFromHex", err)
+	}
+
 	res, err := db.col.UpdateOne(
 		ctx,
-		dao.FromMovieFilter(filter),
+		query,
 		dao.FromMovieUpdateData(update),
 	)
 
@@ -104,9 +122,29 @@ func (db *Movie) UpdateOne(ctx context.Context, filter model.MovieFilter, update
 }
 
 func (db *Movie) DeleteOne(ctx context.Context, filter model.MovieFilter) (model.Movie, error) {
+	var movieDao dao.Movie
+
+	query, err := dao.FromMovieFilter(filter)
+	if err != nil {
+		return model.Movie{}, mongoError("primitive.ObjectIDFromHex", err)
+	}
+
+	err = db.col.FindOne(
+		ctx,
+		query,
+	).Decode(&movieDao)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return model.Movie{}, model.ErrNotFound
+		}
+
+		return model.Movie{}, mongoError("FindOne", err)
+	}
+
 	res, err := db.col.DeleteOne(
 		ctx,
-		dao.FromMovieFilter(filter),
+		query,
 	)
 
 	if err != nil {
@@ -117,5 +155,5 @@ func (db *Movie) DeleteOne(ctx context.Context, filter model.MovieFilter) (model
 		return model.Movie{}, model.ErrNotFound
 	}
 
-	return db.FindOne(ctx, filter)
+	return dao.ToMovie(movieDao), err
 }
