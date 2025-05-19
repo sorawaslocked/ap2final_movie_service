@@ -52,7 +52,7 @@ func (s *Server) Stop() {
 func (s *Server) register() {
 	s.s = grpc.NewServer()
 
-	svc.RegisterMovieServiceServer(s.s, NewMovieServer(s.movieUseCase))
+	svc.RegisterMovieServiceServer(s.s, NewMovieServer(s.movieUseCase, s.log))
 
 	reflection.Register(s.s)
 }

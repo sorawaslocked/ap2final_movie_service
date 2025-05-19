@@ -5,16 +5,22 @@ import (
 	"github.com/sorawaslocked/ap2final_movie_service/internal/adapter/grpc/dto"
 	"github.com/sorawaslocked/ap2final_protos_gen/base"
 	svc "github.com/sorawaslocked/ap2final_protos_gen/service/movie"
+	"log/slog"
 )
 
 type MovieServer struct {
-	uc MovieUseCase
+	uc  MovieUseCase
+	log *slog.Logger
 	svc.UnimplementedMovieServiceServer
 }
 
-func NewMovieServer(uc MovieUseCase) *MovieServer {
+func NewMovieServer(
+	uc MovieUseCase,
+	log *slog.Logger,
+) *MovieServer {
 	return &MovieServer{
-		uc: uc,
+		uc:  uc,
+		log: log,
 	}
 }
 
@@ -23,6 +29,8 @@ func (s *MovieServer) Create(ctx context.Context, req *svc.CreateRequest) (*svc.
 
 	createdMovie, err := s.uc.Create(ctx, movie)
 	if err != nil {
+		s.logError("create", err)
+
 		return nil, dto.FromError(err)
 	}
 
@@ -36,6 +44,8 @@ func (s *MovieServer) Get(ctx context.Context, req *svc.GetRequest) (*svc.GetRes
 
 	movie, err := s.uc.GetByID(ctx, id)
 	if err != nil {
+		s.logError("get", err)
+
 		return nil, dto.FromError(err)
 	}
 
@@ -47,6 +57,8 @@ func (s *MovieServer) Get(ctx context.Context, req *svc.GetRequest) (*svc.GetRes
 func (s *MovieServer) GetAll(ctx context.Context, req *svc.GetAllRequest) (*svc.GetAllResponse, error) {
 	movies, err := s.uc.GetAll(ctx)
 	if err != nil {
+		s.logError("get all", err)
+
 		return nil, dto.FromError(err)
 	}
 
@@ -66,6 +78,8 @@ func (s *MovieServer) Update(ctx context.Context, req *svc.UpdateRequest) (*svc.
 
 	updatedMovie, err := s.uc.UpdateByID(ctx, id, update)
 	if err != nil {
+		s.logError("update", err)
+
 		return nil, dto.FromError(err)
 	}
 
@@ -79,6 +93,8 @@ func (s *MovieServer) Delete(ctx context.Context, req *svc.DeleteRequest) (*svc.
 
 	movie, err := s.uc.DeleteByID(ctx, id)
 	if err != nil {
+		s.logError("delete", err)
+
 		return nil, dto.FromError(err)
 	}
 
